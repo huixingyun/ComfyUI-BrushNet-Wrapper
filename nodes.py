@@ -18,13 +18,13 @@ try:
 except:
     raise ImportError("Diffusers version too old. Please update to 0.27.2 minimum.")
 
-from .single_file_utils import (
-        convert_ldm_vae_checkpoint, 
-        convert_ldm_unet_checkpoint, 
-        create_vae_diffusers_config, 
-        create_unet_diffusers_config,
-        create_text_encoder_from_ldm_clip_checkpoint
-    )       
+from diffusers.pipelines.stable_diffusion.convert_from_ckpt import (
+    convert_ldm_vae_checkpoint,
+    convert_ldm_unet_checkpoint,
+    create_vae_diffusers_config,
+    create_unet_diffusers_config,
+    convert_ldm_clip_checkpoint,
+)
 
 from .brushnet.pipeline_brushnet import StableDiffusionBrushNetPipeline
 from .brushnet.brushnet import BrushNetModel
@@ -172,7 +172,7 @@ class brushnet_model_loader:
 
             # 3. text_model
             print("loading text model")
-            text_encoder = create_text_encoder_from_ldm_clip_checkpoint("openai/clip-vit-large-patch14",sd)
+            text_encoder = convert_ldm_clip_checkpoint(sd, local_files_only=False)
             text_encoder.to(dtype)
 
             # 4. tokenizer
